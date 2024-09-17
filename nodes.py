@@ -272,8 +272,8 @@ class reactor:
                                 restored_face = normalize_cropped_face(output)
 
                             else: # PTH models
-
-                                output = facerestore_model(cropped_face_t, w=codeformer_weight)[0] if "codeformer" in face_restore_model.lower() else facerestore_model(cropped_face_t)[0]
+                                output = facerestore_model(cropped_face_t, w=codeformer_weight)[0] if "codeformer" in face_restore_model.lower() else 2*facerestore_model((cropped_face_t+1)/2)[0]-1
+                                #output = facerestore_model(cropped_face_t, w=codeformer_weight)[0] if "codeformer" in face_restore_model.lower() else facerestore_model(cropped_face_t)[0]
                                 restored_face = tensor2img(output, rgb2bgr=True, min_max=(-1, 1))
 
                         del output
