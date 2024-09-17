@@ -285,7 +285,8 @@ def swap_face(
             # No use in trying to swap faces if no faces are found, enhancement
             if len(target_faces) == 0:
                 logger.status("Cannot detect any Target, skipping swapping...")
-                return result_image
+                raise ValueError("No face found in Target")
+                # return result_image
 
             if source_img is not None:
                 # separated management of wrong_gender between source and target, enhancement
@@ -352,8 +353,10 @@ def swap_face(
 
             else:
                 logger.status("No source face(s) in the provided Index")
+                raise ValueError("No face found in Source")
         else:
             logger.status("No source face(s) found")
+            raise ValueError("No face found in Source")
     return result_image
 
 def swap_face_many(
@@ -475,7 +478,8 @@ def swap_face_many(
             # No use in trying to swap faces if no faces are found, enhancement
             if len(target_faces) == 0:
                 logger.status("Cannot detect any Target, skipping swapping...")
-                return result_images
+                raise ValueError("No face found in Target")
+                #return result_images
 
             if source_img is not None:
                 # separated management of wrong_gender between source and target, enhancement
@@ -488,7 +492,7 @@ def swap_face_many(
             if len(source_faces_index) != 0 and len(source_faces_index) != 1 and len(source_faces_index) != len(faces_index):
                 logger.status(f'Source Faces must have no entries (default=0), one entry, or same number of entries as target faces.')
             elif source_face is not None:
-                results = target_imgs
+                results = []
                 model_path = model_path = os.path.join(insightface_path, model)
                 face_swapper = getFaceSwapModel(model_path)
 
@@ -520,7 +524,7 @@ def swap_face_many(
                                 else:
                                     # logger.status(f"Swapping as-is")
                                     result = face_swapper.get(target_img, target_face_single, source_face)
-                                results[i] = result
+                                results.append(result)
                             elif wrong_gender == 1:
                                 wrong_gender = 0
                                 logger.status("Wrong target gender detected")
@@ -538,6 +542,8 @@ def swap_face_many(
 
             else:
                 logger.status("No source face(s) in the provided Index")
+                raise ValueError("No face found in Source")
         else:
             logger.status("No source face(s) found")
+            raise ValueError("No face found in Source")
     return result_images
